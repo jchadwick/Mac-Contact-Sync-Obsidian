@@ -63,5 +63,16 @@ export class ContactsSettingTab extends PluginSettingTab {
 					this.plugin.settings.ContactTemplatePath = value;
 					await this.plugin.saveSettings();
 				}));
+
+		new Setting(containerEl)
+			.setName('Contact Filename Template')
+			.setDesc('Template for naming contact note files. Use placeholders like {{Name}}, {{FirstName}}, {{LastName}}, {{Organization}}, etc.')
+			.addText(text => text
+				.setPlaceholder('{{Name}}')
+				.setValue(this.plugin.settings.FilenameTemplateContact)
+				.onChange(async (value) => {
+					this.plugin.settings.FilenameTemplateContact = value;
+					await this.plugin.saveSettings();
+				}));
 	}
 }
