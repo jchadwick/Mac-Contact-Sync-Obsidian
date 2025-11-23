@@ -18,6 +18,7 @@ export interface ContactModelParams {
     Emails: string[];
     PhoneNumbers: string[];
     Addresses: string[];
+    Aliases: string[];
     Note: string;
     URLs: string[];
     BirthDate: string;
@@ -63,6 +64,7 @@ export class ContactModel {
     Emails: string[];
     PhoneNumbers: string[];
     Addresses: string[];
+    Aliases: string[];
     Note: string;
     URLs: string[];
     BirthDate: string;
@@ -87,6 +89,7 @@ export class ContactModel {
         this.Emails = params.Emails;
         this.PhoneNumbers = params.PhoneNumbers;
         this.Addresses = params.Addresses;
+        this.Aliases = params.Aliases;
         this.Note = params.Note;
         this.URLs = params.URLs;
         this.BirthDate = params.BirthDate;
@@ -111,16 +114,24 @@ export class ContactModel {
             .filter(url => url.trim() !== '');
 
         let Note = (vCardStr.match(/^NOTE:(.*)$/m)?.[1] ?? '').replace(/\\;/g, ';').replace(/\\n/g, '\n');
-        
+        let Nickname = vCardStr.match(/^NICKNAME:(.*)$/m)?.[1] ?? '';
+
+        // Compute aliases and filter out empty values
+        let firstNameInitial = FirstName.charAt(0);
+        let lastNameInitial = LastName.charAt(0);
+        let firstLastInitialAlias = FirstName && lastNameInitial ? `${FirstName} ${lastNameInitial}` : '';
+        let fullName = FirstName && LastName ? `${FirstName} ${LastName}` : '';
+        let Aliases = [firstLastInitialAlias, fullName, Nickname].filter(alias => alias.trim() !== '');
+
         return new ContactModel({
             Name: vCardStr.match(/^FN:(.*)$/m)?.[1] ?? '',
-            Nickname: vCardStr.match(/^NICKNAME:(.*)$/m)?.[1] ?? '',
+            Nickname: Nickname,
             Prefix: Prefix,
             FirstName: FirstName,
-            FirstNameInitial: FirstName.charAt(0),
+            FirstNameInitial: firstNameInitial,
             MiddleName: MiddleName,
             LastName: LastName,
-            LastNameInitial: LastName.charAt(0),
+            LastNameInitial: lastNameInitial,
             Suffix: Suffix,
             MaidenName: vCardStr.match(/^X-MAIDENNAME:(.*)$/m)?.[1] ?? '',
             PhoneticFirstName: vCardStr.match(/^X-PHONETIC-FIRST-NAME:(.*)$/m)?.[1] ?? '',
@@ -132,6 +143,7 @@ export class ContactModel {
             Emails: Emails,
             PhoneNumbers: PhoneNumbers,
             Addresses: Addresses,
+            Aliases: Aliases,
             Note: Note,
             URLs: URLs,
             BirthDate: vCardStr.match(/^BDAY:(.*)$/m)?.[1] ?? '',

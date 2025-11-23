@@ -11,6 +11,7 @@ export const VCardExcludePhotoRegex = /^BEGIN:VCARD(?![\s\S]*?^PHOTO)[\s\S]*END:
 export const ContactFileReplaceRegex = (): RegExp => new RegExp(`.*?(?=${KEEP_CONTENT_SEPARATOR}|$)`, 's');
 
 export const DEFAULT_CONTACT_TEMPLATE: string = `---
+aliases: {{Aliases}}
 Nickname: {{Nickname}}
 FirstName: {{FirstName}}
 MiddleName: {{MiddleName}}
