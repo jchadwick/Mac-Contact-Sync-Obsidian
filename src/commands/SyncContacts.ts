@@ -37,7 +37,14 @@ export class SyncContacts implements Command {
       if (!contact.hasOwnProperty(param))
         throw new Error(`Illegal placeholder ${String(param)} in template.`);
       let value = contact[param as keyof ContactModel];
-      return Array.isArray(value) ? '['.concat((value as Array<string>).join(', '), ']') : String(value);
+      if (Array.isArray(value)) {
+        // Format addresses, aliases, and phone numbers as JSON array with proper escaping
+        if (param === 'Addresses' || param === 'Aliases' || param === 'PhoneNumbers') {
+          return JSON.stringify(value);
+        }
+        return '['.concat((value as Array<string>).join(', '), ']');
+      }
+      return String(value);
     });
     return filledTemplate;
   }
