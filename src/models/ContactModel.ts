@@ -3,8 +3,10 @@ export interface ContactModelParams {
     Nickname: string;
     Prefix: string;
     FirstName: string;
+    FirstNameInitial: string;
     MiddleName: string;
     LastName: string;
+    LastNameInitial: string;
     Suffix: string;
     MaidenName: string;
     PhoneticFirstName: string;
@@ -46,8 +48,10 @@ export class ContactModel {
     Nickname: string;
     Prefix: string;
     FirstName: string;
+    FirstNameInitial: string;
     MiddleName: string;
     LastName: string;
+    LastNameInitial: string;
     Suffix: string;
     MaidenName: string;
     PhoneticFirstName: string;
@@ -68,8 +72,10 @@ export class ContactModel {
         this.Nickname = params.Nickname;
         this.Prefix = params.Prefix;
         this.FirstName = params.FirstName;
+        this.FirstNameInitial = params.FirstNameInitial;
         this.MiddleName = params.MiddleName;
         this.LastName = params.LastName;
+        this.LastNameInitial = params.LastNameInitial;
         this.Suffix = params.Suffix;
         this.MaidenName = params.MaidenName;
         this.PhoneticFirstName = params.PhoneticFirstName;
@@ -107,8 +113,10 @@ export class ContactModel {
             Nickname: vCardStr.match(/^NICKNAME:(.*)$/m)?.[1] ?? '',
             Prefix: Prefix,
             FirstName: FirstName,
+            FirstNameInitial: FirstName.charAt(0),
             MiddleName: MiddleName,
             LastName: LastName,
+            LastNameInitial: LastName.charAt(0),
             Suffix: Suffix,
             MaidenName: vCardStr.match(/^X-MAIDENNAME:(.*)$/m)?.[1] ?? '',
             PhoneticFirstName: vCardStr.match(/^X-PHONETIC-FIRST-NAME:(.*)$/m)?.[1] ?? '',
