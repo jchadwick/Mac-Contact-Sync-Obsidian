@@ -97,14 +97,18 @@ export class ContactModel {
         let [Organization, Department] = vCardStr.match(/^ORG:([^;]*);([^;\n\R]*)$/m)?.slice(1, 3) ?? ['', ''];
 
         let Emails = Array.from(vCardStr.matchAll(/^.*?EMAIL([^:]*):(?<email>.*)$/mg))
-            .map(match => match.groups?.email ?? '');
+            .map(match => match.groups?.email ?? '')
+            .filter(email => email.trim() !== '');
         let PhoneNumbers = Array.from(vCardStr.matchAll(/^TEL([^:]*):(?<phone>.*)$/mg))
-            .map(match => match.groups?.phone ?? '');
+            .map(match => match.groups?.phone ?? '')
+            .filter(phone => phone.trim() !== '');
         let Addresses = Array.from(vCardStr.matchAll(/^ADR(?<type>[^:]*?):(?<pobox>[^;]*?);(?<extended>[^;]*?);(?<street>[^;]*?);(?<locality>[^;]*?);(?<region>[^;]*?);(?<code>[^;]*?);(?<country>[^;]*?)$/mg))
             .map(match => `${match.groups?.street}, ${match.groups?.code} ${match.groups?.locality}, ${match.groups?.region} ${match.groups?.country}`)
-            .map(adr => adr.replace(/\n,/g, '').replace(/  /g, ' ').trim());
+            .map(adr => adr.replace(/\n,/g, '').replace(/  /g, ' ').trim())
+            .filter(adr => adr !== '');
         let URLs = Array.from(vCardStr.matchAll(/^.*?URL([^:]*):(?<url>.*)$/mg))
-            .map(match => match.groups?.url ?? '');
+            .map(match => match.groups?.url ?? '')
+            .filter(url => url.trim() !== '');
 
         let Note = (vCardStr.match(/^NOTE:(.*)$/m)?.[1] ?? '').replace(/\\;/g, ';').replace(/\\n/g, '\n');
         
