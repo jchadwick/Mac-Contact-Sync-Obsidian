@@ -38,8 +38,8 @@ export class SyncContacts implements Command {
         throw new Error(`Illegal placeholder ${String(param)} in template.`);
       let value = contact[param as keyof ContactModel];
       if (Array.isArray(value)) {
-        // Format addresses, aliases, and phone numbers as JSON array with proper escaping
-        if (param === 'Addresses' || param === 'Aliases' || param === 'PhoneNumbers') {
+        // Format addresses, aliases, phone numbers, and URLs as JSON array with proper escaping
+        if (param === 'Addresses' || param === 'Aliases' || param === 'PhoneNumbers' || param === 'URLs') {
           return JSON.stringify(value);
         }
         return '['.concat((value as Array<string>).join(', '), ']');
